@@ -11,6 +11,7 @@ let corHeight = 90;
 
 let drawBoolean = false;
 let startBoolean = true;
+let mouseBoolean = false;
 
 // secondary canvas & erase mode (hit 'E' to toggle)
 let drawingCanvas;
@@ -34,7 +35,7 @@ function draw() {
   // draw the grid to the main canvas again
   begin();
   
-  if (mouseX > sideSpaces && mouseX < canvasWidth - sideSpaces && mouseY > sideSpaces && mouseY < canvasHeight - sideSpaces && pmouseX > sideSpaces && pmouseX < canvasWidth - sideSpaces && pmouseY > sideSpaces && pmouseY < canvasHeight - sideSpaces) {
+  if (mouseX > sideSpaces && mouseX < canvasWidth - sideSpaces && mouseY > sideSpaces && mouseY < canvasHeight - sideSpaces && pmouseX > sideSpaces && pmouseX < canvasWidth - sideSpaces && pmouseY > sideSpaces && pmouseY < canvasHeight - sideSpaces && mouseBoolean == true) {
     stroke(0);
     
     // implementing erase mode
@@ -46,7 +47,7 @@ function draw() {
       drawingCanvas.line(mouseX, mouseY, pmouseX, pmouseY);
     }
     
-    if (drawBoolean == true && startBoolean == false) {
+    if (eraseBoolean == false && startBoolean == false) {
       drawingCanvas.strokeWeight(3)
       drawingCanvas.noErase();
       
@@ -61,15 +62,16 @@ function draw() {
   image(drawingCanvas, 0, 0)
 }
 
-function mouseClicked() {
+function mousePressed() {
+    mouseBoolean = true;
+  
     if (mouseX > sideSpaces && mouseX < canvasWidth - sideSpaces && mouseY > sideSpaces && mouseY < canvasHeight - sideSpaces && drawBoolean == false && eraseBoolean == false) {
-    drawBoolean = !drawBoolean;
     startBoolean = false;
   } 
+}
 
-  else if (mouseX > sideSpaces && mouseX < canvasWidth - sideSpaces && mouseY > sideSpaces && mouseY < canvasHeight - sideSpaces && drawBoolean == true && eraseBoolean == false) {
-    drawBoolean = !drawBoolean;
-  }
+function mouseReleased() {
+  mouseBoolean = false;
 }
 
 function keyPressed() {
@@ -88,7 +90,7 @@ function keyPressed() {
     // press E
     if (keyCode == 69) {
       eraseBoolean = !eraseBoolean;  
-      drawBoolean = false;
+      // drawBoolean = false;
     }
   }
 }
@@ -137,18 +139,7 @@ function drawWords() {
       noStroke();
       textSize(20);
       fill(0);
-      text("Click on canvas to turn Draw Mode       /    ", 120, 640);
-      fill(0, 255, 0);
-      text("ON", 434, 640);
-      fill(255, 0, 0);
-      text("OFF", 478, 640);
-      
-      fill(0);
-      text("Press ' E ' to turn Erase Mode       /    ", 120, 670);
-      fill(0, 255, 0);
-      text("ON", 389, 670);
-      fill(255, 0, 0);
-      text("OFF", 432, 670);
+      text("Click on canvas to start drawing!", 120, 640);
     } 
     
     else {
@@ -156,32 +147,23 @@ function drawWords() {
       textSize(20);
       fill(0);
       
-      if (drawBoolean == true) {
-        text("Draw Mode:", 120, 640);
-        fill(0, 255, 0);
-        text("ON", 233, 640);
-      } 
-      
-      else {
-        text("Draw Mode:", 120, 640);
-        fill(255, 0, 0);
-        text("OFF", 233, 640);
-      }
-      
-      noStroke();
-      textSize(20);
-      fill(0);
-      
       if (eraseBoolean == true) {
-        text("Erase Mode:", 120, 670);
+        text("Erase Mode:", 120, 640);
         fill(0, 255, 0);
-        text("ON", 240, 670);
+        text("ON", 240, 640);
       } 
       
       else {
-        text("Erase Mode:", 120, 670);
+        text("Erase Mode:", 120, 640);
         fill(255, 0, 0);
-        text("OFF", 240, 670);
+        text("OFF", 240, 640);
       }
+      
+      fill(0);
+      text("Press ' E ' to turn Erase Mode       /    ", 120, 670);
+      fill(0, 255, 0);
+      text("ON", 389, 670);
+      fill(255, 0, 0);
+      text("OFF", 432, 670);
     }
 }
